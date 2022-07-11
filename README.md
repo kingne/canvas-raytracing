@@ -1,0 +1,1 @@
+工程化的canvas光线追踪，希望通过typeacript，offscreencanvas, web worker来优化之前的渲染项目
