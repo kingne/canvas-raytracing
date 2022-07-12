@@ -6,6 +6,22 @@ class Vec3 {
         return new Vec3(x, y, z);
     }
 
+    public static random() {
+        const r = Math.random;
+        const x = r();
+        const y = r();
+        const z = r();
+        return new Vec3(x, y, z);
+    }
+
+    public static random_double(min: number, max: number) {
+        const rdb = (min: number, max: number) => min + (max - min) * Math.random();
+        const x = rdb(min, max);
+        const y = rdb(min, max);
+        const z = rdb(min, max);
+        return new Vec3(x, y, z);
+    }
+
     private $x: number;
     private $y: number;
     private $z: number;
@@ -60,6 +76,22 @@ class Vec3 {
         return this;
     }
 
+    public dot(v: Vec3) {
+        const { $x, $y, $z } = this;
+        const { x, y, z } = v;
+        return $x * x + $y * y + $z * z;
+    }
+
+    public cross(v: Vec3) {
+        const { $x:u0, $y:u1, $z:u2 } = this;
+        const { x:v0, y:v1, z:v2 } = v;
+        return this.set(
+            u1 * v2 - u2 * v1,
+            u2 * v0 - u0 * v2,
+            u0 * v1 - u1 * v0,     
+        )
+    }
+
     public mulT(t: number) {
         this.$x *= t;
         this.$y *= t;
@@ -81,6 +113,10 @@ class Vec3 {
         return new Vec3(x, y, z);
     }
 
+    public normalize() {
+        this.divT(this.length() || 1);
+    }
+
     public length_squared() {
         const { $x, $y, $z } = this;
         return $x * $x + $y * $y + $z * $z;
@@ -92,6 +128,13 @@ class Vec3 {
 
     public negate() {
         return this.mulT(-1);
+    }
+
+    public near_zero() {
+        const s = 1e-8;
+        const { $x, $y, $z } = this;
+        const abs = Math.abs;
+        return (abs($x) < s) && (abs($y) < s) && (abs($z) < s);
     }
 }
 
